@@ -1,0 +1,27 @@
+webserver:
+  build: images/webserver
+  ports:
+    - "80:80"
+  links:
+    - mysql:mysql
+  volumes:
+    - "./sites/www/www.conf:/etc/nginx/sites-enabled/www.conf"
+    - "./www/:/var/www/"  
+mysql:
+  image: tutum/mysql
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+    MYSQL_PASS: password
+    ON_CREATE_DB: "wordpressdb"
+
+phpmyadmin:
+  image: corbinu/docker-phpmyadmin
+  links:
+    - mysql:mysql
+  ports:
+    - 8181:80
+  environment:
+    MYSQL_USERNAME: root
+    MYSQL_ROOT_PASSWORD: password
